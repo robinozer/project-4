@@ -1,4 +1,15 @@
 from django.contrib import admin
-from .models import UserManager, User
+from django.contrib.auth.admin import UserAdmin
+from .models import User
+
+
+@admin.register(UserAdmin)
+class CustomUserAdmin(admin.UserAdmin):
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'groups')
+    search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('email')
+    filter_horizontal = ('groups', 'user_permissions')
+
 
 admin.site.register(User)

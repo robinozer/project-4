@@ -81,13 +81,14 @@ class User(AbstractBaseUser):
 
 
 class Table(models.Model):
-    """A model representing a table in the restaurant."""
-    number = models.IntegerField()  # The table number
+    """A model representing a table in the restaurant,
+    to keep track of available seating options."""
+    table_number = models.IntegerField()  # The table number
     capacity = models.IntegerField()  # Max no of guests the table can seat
 
     def __str__(self):
         """Return a string representation of the table."""
-        return f'Table {self.number} with capacity of {self.capacity} guests.'
+        return f'Table {self.table_number} with capacity of {self.capacity} guests.'
 
 
 class Booking(models.Model):

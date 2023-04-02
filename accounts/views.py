@@ -5,9 +5,8 @@ from django.contrib import messages
 from .models import Reservation
 from .forms import ReservationForm
 
+
 @login_required
 def reservations(request):
     reservations = Reservation.objects.filter(user=request.user)
     return render(request, 'bookings/reservations.html', {'reservations': reservations})
-
-
