@@ -19,6 +19,9 @@ class Booking(models.Model):
     time = models.TimeField()  # The time of the booking
     guests = models.IntegerField()  # The number of guests for the booking
 
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         """Return a string representation of the booking."""
         return f'{self.user.username} has booked - table no. {self.table} - for {self.date} {self.time}, for {self.guests} guests.'
