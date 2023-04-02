@@ -20,7 +20,7 @@ class Booking(models.Model):
     guests = models.IntegerField()  # The number of guests for the booking
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['-date_time']
 
     def __str__(self):
         """Return a string representation of the booking."""
