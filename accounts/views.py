@@ -9,12 +9,47 @@ from django.contrib import messages
 from .models import Booking, User, Table
 
 
-# List view to display all bookings made by a user.
+# List view to display all bookings made by a user
 class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
     template_name = 'bookings/booking_list.html'
     context_object_name = 'bookings'
 
-    # Return the bookings for the currently logged in user.
+    # Return the bookings for the currently logged in user
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
+
+
+# Display details of a single booking
+class BookingDetailView(LoginRequiredMixin, DetailView):
+    model = Booking
+    template_name = 'bookings/booking_detail.html'
+    context_object_name = 'bookings'
+
+
+# Create a new booking
+class BookingCreateView(LoginRequiredMixin, CreateView):
+    model = Booking
+    fields = ['table', 'date_time', 'guests']
+    success_url = reverse_lazy('booking_list')
+    template_name = 'bookings/booking_form.html'
+
+    # Set the current user as the user for the new booking
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+# Update an existing booking
+class BookingUpdateView(LoginRequiredMixin, UpdateView):
+    model = Booking
+    fields = ['table', 'date_time', 'guests']
+    success_url = reverse_lazy('booking_list')
+    template_name = 'bookings/booking_form.html'
+
+
+# Delete an existing booking
+class BookingDeleteView(LoginRequiredMixin, DeleteView):
+    model = Booking
+    success_url = reverse_lazy('booking_list')
+    template_name = 'bookings/booking_confirm_delete.html'
