@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
     # Define a model that allows for custom user and superuser creation
     def create_user(self, email, password=None, **extra_fields):
         """
-        Creates and saves a new User with the given email and password.
+        Create and save a new User with the given email and password.
         """
         if not email:
             raise ValueError("Email address is required")
@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password=None, **extra_fields):
         """
-        Creates and saves a new superuser with the given email and password.
+        Create and save a new superuser with the given email and password.
         """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -97,6 +97,7 @@ class Booking(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)  # The table reserved by the user
     date_time = models.DateTimeField()  # The date and time of the booking
     guests = models.IntegerField()  # The number of guests for the booking
+    confirmed = models.BooleanField(default=False)  # Booking confirmation Y/N
 
     class Meta:
         ordering = ['-date_time']
