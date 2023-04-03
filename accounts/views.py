@@ -34,7 +34,7 @@ class BookingDetailView(LoginRequiredMixin, DetailView):
 # Create a new booking
 class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
-    fields = ['table', 'date_time', 'guests'] # Fields to be included in the form
+    fields = ['table', 'date_time', 'guests']  # Fields to be included in the form
     success_url = reverse_lazy('booking_list')
     template_name = 'bookings/booking_form.html'
 
@@ -133,6 +133,7 @@ class UserDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'users/user_detail.html'
     permission_required = ('users.view_user')
 
+
 # Create a new User object
 class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = User
@@ -147,4 +148,3 @@ class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         user.save()
         messages.success(self.request, 'User created successfully')
         return redirect('user-detail', pk=user.pk)
-
