@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.views.generic.edit import ListView, CreateView, UpdateView, DeleteView   # Is this one even necessary?
-from django.contrib.auth.decorators import login_required, permission_required
+from django.views.generic.edit import ListView, CreateView, UpdateView, DeleteView   # Is this one necessary?
+from django.contrib.auth.decorators import login_required, permission_required      #  Is this one also necessary?
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 
@@ -14,6 +14,7 @@ class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
     template_name = 'bookings/booking_list.html'
     context_object_name = 'bookings'
+    paginate_by = 8
 
     # Return the bookings for the currently logged in user
     def get_queryset(self):
@@ -53,3 +54,37 @@ class BookingDeleteView(LoginRequiredMixin, DeleteView):
     model = Booking
     success_url = reverse_lazy('booking_list')
     template_name = 'bookings/booking_confirm_delete.html'
+
+#  Views for Table model
+
+
+# Display all tables
+class TableListView(ListView):
+    model = Table
+    context_object_name = 'table'
+    template_name = 'tables/table_list.html'
+    paginate_by = 8
+
+
+# Display a specific table's details
+class TableDetailView(DetailView):
+    model = Table
+    context_object_name = 'table'
+    template_name = 'tables/table_detail.html'
+
+
+# Create a new table
+class TableCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Table
+    fields = ['table_number', 'capacity']
+    template_name = 'tables/table_form.html'
+    permission_required = ('tables.add_table',)
+
+    # Overriding the form_valid method to customize the success message
+    def form_valid(self, form):
+        table = form.save()
+        messages.success(self.request, 'Table created successfully')
+        return redirect('table-detail', pk=table.pk)
+
+
+
