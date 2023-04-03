@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import ListView, CreateView, UpdateView, DeleteView   # Is this one necessary?
-from django.contrib.auth.decorators import login_required, permission_required      #  Is this one also necessary?
+from django.contrib.auth.decorators import login_required, permission_required      # Is this one also necessary?
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 
@@ -55,6 +55,7 @@ class BookingDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('booking_list')
     template_name = 'bookings/booking_confirm_delete.html'
 
+
 #  Views for Table model
 
 
@@ -87,4 +88,24 @@ class TableCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return redirect('table-detail', pk=table.pk)
 
 
+# Update an existing table
+class TableUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Table
+    fields = ['table_number', 'capacity']
+    template_name = 'tables/table_form.html'
+    permission_required = ('tables.change_table',)
 
+    # Overriding the form_valid method to customize the success message
+    def form_valid(self, form):
+        table = form.save()
+        messages.success(self.request, 'Table updated successfully')
+        return redirect('table-detail', pk=table.pk)
+
+
+# Delete an existing table
+class TableDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = Table
+    context_object_name = 'table'
+    template_name = 'tables/table_confirm_delete.html'
+    success_url = reverse_lazy('table-list')
+    permission_required = ('tables.delete_table',)
