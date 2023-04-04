@@ -15,7 +15,7 @@ from .models import Booking, Table, User
 # List view to display all bookings made by a user
 class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
-    template_name = 'bookings/booking_list.html'  # The template used to render the view
+    template_name = 'index.html'  # The template used to render the view
     context_object_name = 'bookings'  # The name of the variable to be used in the template
     paginate_by = 8
 
@@ -126,7 +126,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     paginate_by = 8
 
 
-# Display the details of a single User object
+# Display the details of a single User
 class UserDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = User
     context_object_name = 'user'
@@ -134,7 +134,7 @@ class UserDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     permission_required = ('users.view_user')
 
 
-# Create a new User object
+# Create a new User
 class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = User
     fields = ['email', 'first_name', 'last_name', 'password']
