@@ -2,12 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
+# Define a model that allows for custom user and superuser creation
 class UserManager(BaseUserManager):
-    # Define a model that allows for custom user and superuser creation
+    # Create and save a new User with the given email and password.
     def create_user(self, email, password=None, **extra_fields):
-        """
-        Create and save a new User with the given email and password.
-        """
         if not email:
             raise ValueError("Email address is required")
 
@@ -27,11 +25,9 @@ class UserManager(BaseUserManager):
 
         # Return the newly created user instance
         return user
-
+    
+    # Create and save a new superuser with the given email and password.
     def create_superuser(self, email, password=None, **extra_fields):
-        """
-        Create and save a new superuser with the given email and password.
-        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
