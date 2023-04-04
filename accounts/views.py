@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.views.generic.edit import ListView, CreateView, UpdateView, DeleteView   # Is this one necessary?
-from django.contrib.auth.decorators import login_required, permission_required      # Is this one also necessary?
+from django.contrib.auth.decorators import login_required, permission_required  # Is this one necessary?
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 
@@ -78,11 +77,10 @@ class TableDetailView(DetailView):
 
 
 # Create a new table
-class TableCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class TableCreateView(LoginRequiredMixin, CreateView):
     model = Table
     fields = ['table_number', 'capacity']
     template_name = 'tables/table_form.html'
-    permission_required = ('tables.add_table')  # Permissions required to access the view
 
     # Overriding the form_valid method to customize the success message
     def form_valid(self, form):
@@ -92,11 +90,10 @@ class TableCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 # Update an existing table
-class TableUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class TableUpdateView(LoginRequiredMixin, UpdateView):
     model = Table
     fields = ['table_number', 'capacity']
     template_name = 'tables/table_form.html'
-    permission_required = ('tables.change_table')
 
     # Overriding the form_valid method to customize the success message
     def form_valid(self, form):
@@ -106,12 +103,11 @@ class TableUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 # Delete an existing table
-class TableDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class TableDeleteView(LoginRequiredMixin, DeleteView):
     model = Table
     context_object_name = 'table'
     template_name = 'tables/table_confirm_delete.html'
     success_url = reverse_lazy('table-list')
-    permission_required = ('tables.delete_table')
 
 
 # Views for User model
@@ -135,7 +131,7 @@ class UserDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
 
 
 # Create a new User
-class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class UserCreateView(CreateView):
     model = User
     fields = ['email', 'first_name', 'last_name', 'password']
     template_name = 'users/user_form.html'
@@ -148,3 +144,5 @@ class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         user.save()
         messages.success(self.request, 'User created successfully')
         return redirect('user-detail', pk=user.pk)
+
+
