@@ -146,3 +146,9 @@ class UserCreateView(CreateView):
         return redirect('user-detail', pk=user.pk)
 
 
+# Delete an existing User
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    context_object_name = 'user'
+    template_name = 'users/user_confirm_delete.html'
+    success_url = reverse_lazy('user-list')  # The URL to redirect to after a successful delete
